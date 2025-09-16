@@ -228,7 +228,7 @@ class ResumeLinkScanner {
             // Markdown links: [text](url)
             { regex: /\[([^\]]+)\]\(([^)]+)\)/g, type: 'markdown' },
             // Plain URLs with http/https
-            { regex: /(https?:\/\/[^\s\])+)/g, type: 'url' },
+            { regex: /(https?:\/\/[^\s\]]+)/g, type: 'url' },
             // Email addresses
             { regex: /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, type: 'email' },
             // URLs without protocol (www.)
