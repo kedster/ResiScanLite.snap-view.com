@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Link Scanner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Resume Link Scanner</h1>
+            <p>Upload PDF or Word documents to scan for links and extract them into a searchable table</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">📄</div>
+                        <h3>Drop files here or click to browse</h3>
+                        <p>Supported formats: PDF, DOC, DOCX</p>
+                    </div>
+                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx" multiple hidden>
+                </div>
+                <div class="processing-status" id="processingStatus" hidden>
+                    <div class="spinner"></div>
+                    <span>Processing files...</span>
+                </div>
+            </section>
+
+            <section class="results-section" id="resultsSection" hidden>
+                <div class="results-header">
+                    <h2>Extracted Links</h2>
+                    <div class="results-actions">
+                        <input type="text" id="searchInput" placeholder="Search links..." class="search-input">
+                        <button id="exportCsv" class="btn btn-secondary">Export CSV</button>
+                        <button id="exportMarkdown" class="btn btn-secondary">Export Markdown</button>
+                        <button id="clearResults" class="btn btn-outline">Clear</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>Link Text</th>
+                                <th>URL</th>
+                                <th>Context Snippet</th>
+                                <th>Source File</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="results-summary" id="resultsSummary"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Main application script -->
+    <script src="app.js"></script>
+</body>
+</html>
