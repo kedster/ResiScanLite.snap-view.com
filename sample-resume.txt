@@ -1,0 +1,31 @@
+Sample Resume - John Doe
+
+Contact Information:
+Email: john.doe@example.com
+Phone: (555) 123-4567
+LinkedIn: linkedin.com/in/johndoe
+Portfolio: https://johndoe.dev
+GitHub: github.com/johndoe
+
+Professional Summary:
+Experienced software developer with expertise in web technologies.
+Visit my portfolio at https://johndoe.dev for examples of my work.
+
+Experience:
+Software Developer at TechCorp
+- Developed web applications using React and Node.js
+- Check out our company website: https://techcorp.com
+- Collaborated with team via Slack: techcorp.slack.com
+
+Education:
+Bachelor of Computer Science
+University Website: www.university.edu
+
+Additional Links:
+- Blog: https://blog.johndoe.com
+- Twitter: twitter.com/johndoe
+- Personal website: johndoe.com
+- Stack Overflow: stackoverflow.com/users/johndoe
+
+References available upon request.
+Contact me at john.doe@gmail.com for more information.
