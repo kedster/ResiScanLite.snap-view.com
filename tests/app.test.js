@@ -1,6 +1,5 @@
 /**
  * @jest-environment jsdom
- * Testing library and framework: Jest with JSDOM
  */
 
 const fs = require('fs');
@@ -286,12 +285,53 @@ My homepage: www.portfolio-site.dev/work`
     expect(errSpy).toHaveBeenCalledWith(expect.stringMatching(/Error processing files: boom/));
   });
 
-  test('processFile shows friendly messages for PDF and Word files', async () => {
+  test('processFile handles PDF and Word files properly', async () => {
     const errSpy = jest.spyOn(scanner, 'showError').mockImplementation(() => {});
+    
+    // Test PDF file - should attempt to load PDF.js and show error when it fails
     await scanner.processFile({ name: 'x.pdf', type: 'application/pdf' });
-    expect(errSpy).toHaveBeenCalledWith(expect.stringMatching(/PDF processing requires/));
+    expect(errSpy).toHaveBeenCalledWith(expect.stringMatching(/PDF parsing failed/));
+    
+    // Test Word file - should show error when mammoth is not available
+    global.mammoth = undefined;
     await scanner.processFile({ name: 'x.doc', type: 'application/msword' });
-    expect(errSpy).toHaveBeenCalledWith(expect.stringMatching(/Word document processing requires/));
+    expect(errSpy).toHaveBeenCalledWith(expect.stringMatching(/DOC\/DOCX parsing is not available/));
+  });
+
+  test('readDocFile processes DOCX files with mammoth.js', async () => {
+    // Mock mammoth.js
+    global.mammoth = {
+      extractRawText: jest.fn().mockResolvedValue({
+        value: 'Test content with https://example.com link',
+        messages: []
+      })
+    };
+
+    const mockFile = new Blob(['fake docx content'], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const result = await scanner.readDocFile(mockFile);
+    
+    expect(result).toBe('Test content with https://example.com link');
+    expect(global.mammoth.extractRawText).toHaveBeenCalled();
+  });
+
+  test('readDocFile handles mammoth.js errors', async () => {
+    global.mammoth = {
+      extractRawText: jest.fn().mockRejectedValue(new Error('Mammoth parsing failed'))
+    };
+
+    const mockFile = new Blob(['fake docx content'], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    
+    await expect(scanner.readDocFile(mockFile)).rejects.toThrow('Failed to read DOC/DOCX file: Mammoth parsing failed');
+  });
+
+  test('fileToArrayBuffer converts file to ArrayBuffer', async () => {
+    const testContent = 'test file content';
+    const mockFile = new Blob([testContent], { type: 'text/plain' });
+    
+    const result = await scanner.fileToArrayBuffer(mockFile);
+    
+    expect(result).toBeInstanceOf(ArrayBuffer);
+    expect(new TextDecoder().decode(result)).toBe(testContent);
   });
 
   test('renderTable escapes HTML to prevent injection', () => {

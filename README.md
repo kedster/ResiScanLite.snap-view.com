@@ -6,6 +6,10 @@ A client-side JavaScript application that scans resume documents for links and d
 
 - **File Upload**: Support for PDF, Word documents (.doc, .docx), and text files
 - **Client-Side Processing**: All processing happens in the browser (no server required)
+- **Real Document Parsing**: 
+  - **DOCX files**: Uses mammoth.js for clean text extraction with semantic meaning preservation
+  - **PDF files**: Uses pdfjs-dist for reliable text extraction (when CDN accessible)
+  - **Text files**: Direct text processing
 - **Link Extraction**: Automatically detects and extracts:
   - URLs (http/https)
   - Email addresses
@@ -51,6 +55,9 @@ A client-side JavaScript application that scans resume documents for links and d
 
 - **Frontend**: Pure HTML, CSS, and JavaScript (no frameworks)
 - **File Processing**: Client-side text extraction and parsing
+  - **DOCX**: mammoth.js for semantic text extraction
+  - **PDF**: pdfjs-dist for reliable text parsing (when available)
+  - **TXT**: Direct FileReader API
 - **Link Detection**: Regular expressions for various URL formats
 - **Export**: Blob API for file downloads
 - **Responsive**: Mobile-friendly design
@@ -69,8 +76,8 @@ A client-side JavaScript application that scans resume documents for links and d
 
 ## Future Enhancements
 
-- PDF.js integration for better PDF text extraction
-- Mammoth.js integration for improved Word document processing
-- Microsoft Graph API integration for advanced document conversion
+- Enhanced PDF.js integration with local worker files
+- Advanced link validation and status checking
 - OCR support for image-based PDFs
-- Link validation and status checking
+- Microsoft Graph API integration for enterprise document conversion
+- Batch processing optimization for large files
