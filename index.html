@@ -19,9 +19,9 @@
                     <div class="upload-content">
                         <div class="upload-icon">📄</div>
                         <h3>Drop files here or click to browse</h3>
-                        <p>Supported formats: PDF, DOC, DOCX</p>
+                        <p>Supported formats: PDF, DOC, DOCX, TXT</p>
                     </div>
-                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx" multiple hidden>
+                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" multiple hidden>
                 </div>
                 <div class="processing-status" id="processingStatus" hidden>
                     <div class="spinner"></div>
@@ -58,6 +58,9 @@
         </main>
     </div>
 
+    <!-- Mammoth.js library for DOC/DOCX parsing -->
+    <script src="libs/mammoth.browser.min.js"></script>
+    
     <!-- Main application script -->
     <script src="app.js"></script>
 </body>

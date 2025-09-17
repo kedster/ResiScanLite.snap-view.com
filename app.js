@@ -103,13 +103,21 @@ class ResumeLinkScanner {
             if (file.type === 'text/plain' || file.name.toLowerCase().endsWith('.txt')) {
                 text = await this.readTextFile(file);
             } else if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-                // For demo purposes, show message about PDF processing
-                this.showError(`PDF processing requires additional libraries. For demo purposes, please upload a text file (.txt) containing URLs like "https://linkedin.com/in/johndoe" or email addresses.`);
-                return;
+                try {
+                    text = await this.readPdfFile(file);
+                } catch (pdfError) {
+                    console.warn('PDF parsing failed:', pdfError);
+                    this.showError(`PDF parsing failed: ${pdfError.message}`);
+                    return;
+                }
             } else if (file.type.includes('word') || file.name.toLowerCase().endsWith('.docx') || file.name.toLowerCase().endsWith('.doc')) {
-                // For demo purposes, show message about Word processing
-                this.showError(`Word document processing requires additional libraries. For demo purposes, please upload a text file (.txt) containing URLs and links.`);
-                return;
+                // DOC/DOCX parsing with mammoth.js
+                if (typeof mammoth !== 'undefined') {
+                    text = await this.readDocFile(file);
+                } else {
+                    this.showError('DOC/DOCX parsing is not available. Mammoth.js library failed to load. Please try uploading a text file (.txt) for demo purposes.');
+                    return;
+                }
             }
 
             // Convert text to markdown-like format for processing
@@ -128,6 +136,101 @@ class ResumeLinkScanner {
             reader.onload = (e) => resolve(e.target.result);
             reader.onerror = () => reject(new Error('Failed to read text file'));
             reader.readAsText(file);
+        });
+    }
+
+    async loadPdfJs() {
+        // Check if PDF.js is already loaded
+        if (typeof pdfjsLib !== 'undefined') {
+            return true;
+        }
+
+        try {
+            // Try to load PDF.js dynamically
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = () => {
+                    if (typeof pdfjsLib !== 'undefined') {
+                        // Set worker path
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                        resolve(true);
+                    } else {
+                        reject(new Error('PDF.js failed to load properly'));
+                    }
+                };
+                script.onerror = () => {
+                    reject(new Error('Failed to load PDF.js from CDN'));
+                };
+                document.head.appendChild(script);
+            });
+        } catch (error) {
+            console.error('Error loading PDF.js:', error);
+            return false;
+        }
+    }
+
+    async readPdfFile(file) {
+        try {
+            // Try to load PDF.js if not already available
+            if (typeof pdfjsLib === 'undefined') {
+                const loaded = await this.loadPdfJs();
+                if (!loaded) {
+                    throw new Error('PDF.js library could not be loaded. This may be due to network restrictions or ad blockers.');
+                }
+            }
+
+            const arrayBuffer = await this.fileToArrayBuffer(file);
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            
+            let text = '';
+            
+            // Extract text from each page
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const textContent = await page.getTextContent();
+                
+                // Combine text items with proper spacing
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                text += pageText + '\n\n';
+            }
+            
+            return text.trim();
+        } catch (error) {
+            console.error('Error reading PDF:', error);
+            throw new Error(`Failed to read PDF file: ${error.message}`);
+        }
+    }
+
+    async readDocFile(file) {
+        try {
+            // Check if mammoth is available
+            if (typeof mammoth === 'undefined') {
+                throw new Error('Mammoth.js library not loaded');
+            }
+
+            const arrayBuffer = await this.fileToArrayBuffer(file);
+            
+            // Convert DOCX to plain text
+            const result = await mammoth.extractRawText({ arrayBuffer });
+            
+            if (result.messages && result.messages.length > 0) {
+                console.warn('Mammoth warnings:', result.messages);
+            }
+            
+            return result.value || '';
+        } catch (error) {
+            console.error('Error reading DOC/DOCX:', error);
+            throw new Error(`Failed to read DOC/DOCX file: ${error.message}`);
+        }
+    }
+
+    async fileToArrayBuffer(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => reject(new Error('Failed to read file as ArrayBuffer'));
+            reader.readAsArrayBuffer(file);
         });
     }
 
