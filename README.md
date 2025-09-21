@@ -1,4 +1,4 @@
-# Resume Link Scanner
+# ResiScanLite
 
 A client-side JavaScript application that scans resume documents for links and displays them in a searchable, exportable table.
 

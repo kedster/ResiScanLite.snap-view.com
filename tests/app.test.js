@@ -72,6 +72,11 @@ function setupDOM() {
 }
 
 function loadScannerClass() {
+  // Return existing class if already loaded
+  if (window.ResumeLinkScanner) {
+    return window.ResumeLinkScanner;
+  }
+
   const raw = fs.readFileSync(APP_FILE, 'utf8');
 
   // Remove auto-initialization on DOMContentLoaded to avoid hidden side-effects in tests
