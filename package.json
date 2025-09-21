@@ -1,5 +1,5 @@
 {
-  "name": "resume-link-scanner",
+  "name": "resiscanlite",
   "version": "1.0.0",
   "description": "A client-side JavaScript application that scans resume documents for links and displays them in a searchable, exportable table.",
   "main": "app.js",

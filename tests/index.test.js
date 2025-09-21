@@ -1,5 +1,5 @@
 /**
- * Tests: Resume Link Scanner HTML structure (index.html)
+ * Tests: ResiScanLite HTML structure (index.html)
  * Framework: Jest/Vitest-compatible (describe/test/expect). No new deps; Node fs + RegExp only.
  * Focus: Structural verification based on PR diff content for index.html.
  */
@@ -18,13 +18,13 @@ const FALLBACK_HTML = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Link Scanner</title>
+    <title>ResiScanLite</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Resume Link Scanner</h1>
+            <h1>ResiScanLite</h1>
             <p>Upload PDF or Word documents to scan for links and extract them into a searchable table</p>
         </header>
 
@@ -105,7 +105,7 @@ function countOccurrences(re, content) {
   return matches ? matches.length : 0;
 }
 
-describe('Resume Link Scanner HTML (index.html)', () => {
+describe('ResiScanLite HTML (index.html)', () => {
   let html;
 
   beforeAll(() => {
@@ -124,7 +124,7 @@ describe('Resume Link Scanner HTML (index.html)', () => {
     // Ensure viewport includes width=device-width and initial-scale
     expectOne(/<meta[^>]*name=["']viewport["'][^>]*content=["'][^"']*width=device-width[^"']*["']/i, html, 'viewport width=device-width');
     expectOne(/<meta[^>]*name=["']viewport["'][^>]*content=["'][^"']*initial-scale=1(\.0)?[^"']*["']/i, html, 'viewport initial-scale');
-    expectOne(/<title>\s*Resume Link Scanner\s*<\/title>/, html, 'title');
+    expectOne(/<title>\s*ResiScanLite\s*<\/title>/, html, 'title');
     expectOne(/<link[^>]*rel=["']stylesheet["'][^>]*href=["']styles\.css["'][^>]*>/i, html, 'stylesheet link');
   });
 
@@ -137,16 +137,16 @@ describe('Resume Link Scanner HTML (index.html)', () => {
   });
 
   test('header has H1 + descriptive paragraph', () => {
-    expectOne(/<header>[\s\S]*?<h1>\s*Resume Link Scanner\s*<\/h1>[\s\S]*?<\/header>/, html, 'H1 in header');
+    expectOne(/<header>[\s\S]*?<h1>\s*ResiScanLite\s*<\/h1>[\s\S]*?<\/header>/, html, 'H1 in header');
     expectOne(/<header>[\s\S]*?<p>[^<]+<\/p>[\s\S]*?<\/header>/, html, 'description paragraph in header');
   });
 
   test('upload section structure and file input attributes', () => {
     expectOne(/<section[^>]*class=["'][^"']*\bupload-section\b[^"']*["'][^>]*>/i, html, 'upload section');
-    expectOne(/<div[^>]*id=["']uploadArea["'][^>]*class=["'][^"']*\bupload-area\b[^"']*["'][^>]*>/i, html, 'upload area');
+    expectOne(/<div[^>]*class=["'][^"']*\bupload-area\b[^"']*["'][^>]*id=["']uploadArea["'][^>]*>/i, html, 'upload area');
     expectOne(/<div[^>]*class=["'][^"']*\bupload-icon\b[^"']*["'][^>]*>📄<\/div>/, html, 'upload icon');
     expectOne(/<h3>\s*Drop files here or click to browse\s*<\/h3>/, html, 'drop files heading');
-    expectOne(/<p>\s*Supported formats:\s*PDF,\s*DOC,\s*DOCX\s*<\/p>/, html, 'supported formats text');
+    expectOne(/<p>\s*Supported formats:\s*PDF,\s*DOC,\s*DOCX,\s*TXT\s*<\/p>/, html, 'supported formats text');
 
     const inputMatch = html.match(/<input[^>]*id=["']fileInput["'][^>]*>/i);
     expect(inputMatch).not.toBeNull();
