@@ -246,8 +246,8 @@ describe('ResiScanLite HTML (index.html)', () => {
     expectOne(/<footer[^>]*class=["'][^"']*\bsite-footer\b[^"']*["'][^>]*>/i, html, 'site footer');
     expectOne(/(&copy;|©)\s*2024\s*ResiScanLite/i, html, 'copyright notice');
     expectOne(/github\.com\/kedster/i, html, 'GitHub social link');
-    expectOne(/twitter\.com\/kedster/i, html, 'Twitter social link');
-    expectOne(/linkedin\.com\/in\/kedster/i, html, 'LinkedIn social link');
-    expectOne(/peerlist\.io\/kedster/i, html, 'Peerlist social link');
+    expectOne(/x\.com\/sethkeddy/i, html, 'X (Twitter) social link');
+    expectOne(/linkedin\.com\/in\/seth-keddy/i, html, 'LinkedIn social link');
+    expectOne(/peerlist\.io\/sethkeddy/i, html, 'Peerlist social link');
   });
 });
