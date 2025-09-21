@@ -191,7 +191,7 @@ main {
     margin: 0 auto;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 3rem;
 }
 
@@ -234,6 +234,27 @@ main {
 
 .footer-links a:hover {
     color: var(--primary-color);
+}
+
+/* App Links Styling */
+.app-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: block;
+    padding: 0.2rem 0;
+}
+
+.app-links a:hover {
+    color: var(--primary-color);
+    transform: translateX(2px);
+}
+
+.app-links a:before {
+    content: "🚀 ";
+    margin-right: 0.3rem;
 }
 
 .social-links {
