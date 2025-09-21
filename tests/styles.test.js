@@ -55,11 +55,9 @@ function blockForSelector(css, selector) {
   // Handles nested braces minimally by counting.
   let pattern;
   if (selector.includes("\\")) {
-
     pattern = new RegExp(selector + "\\s*\\{", "m");
   } else {
     const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
     pattern = new RegExp(escaped + "\\s*\\{", "m");
   }
   const m = pattern.exec(css);
@@ -163,9 +161,23 @@ describe("styles.css - PR diff validation", () => {
     });
 
     test("@keyframes spin exists and rotates 0deg -> 360deg", () => {
-      const kfMatch = CSS.match(/@keyframes\s+spin\s*\{([\s\S]*?)\}/);
-      expect(kfMatch).toBeTruthy();
-      const inner = kfMatch ? kfMatch[1] : '';
+      // Use a more robust approach to extract keyframes content
+      const keyframesStart = CSS.indexOf('@keyframes spin');
+      expect(keyframesStart).toBeGreaterThan(-1);
+      
+      const openBrace = CSS.indexOf('{', keyframesStart);
+      expect(openBrace).toBeGreaterThan(-1);
+      
+      // Find the matching closing brace
+      let braceCount = 1;
+      let pos = openBrace + 1;
+      while (pos < CSS.length && braceCount > 0) {
+        if (CSS[pos] === '{') braceCount++;
+        else if (CSS[pos] === '}') braceCount--;
+        pos++;
+      }
+      
+      const inner = CSS.substring(openBrace + 1, pos - 1);
       expect(inner).toMatch(/0%\s*\{\s*transform:\s*rotate\(0deg\)\s*;\s*\}/);
       expect(inner).toMatch(/100%\s*\{\s*transform:\s*rotate\(360deg\)\s*;\s*\}/);
     });
@@ -252,7 +264,7 @@ describe("styles.css - PR diff validation", () => {
 
   describe("Responsive media query @media (max-width: 768px)", () => {
     test("contains expected overrides", () => {
-      const m = CSS.match(/@media\s*\(max-width:\s*768px\)\s*\{([\s\S]*?)\}\s*$/m);
+      const m = CSS.match(/@media\s*\(max-width:\s*768px\)\s*\{([\s\S]*?)\}\s*(?:\/\*|$)/m);
       expect(m).toBeTruthy();
       const inner = m ? m[1] : '';
 
