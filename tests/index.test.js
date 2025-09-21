@@ -128,17 +128,18 @@ describe('ResiScanLite HTML (index.html)', () => {
     expectOne(/<link[^>]*rel=["']stylesheet["'][^>]*href=["']styles\.css["'][^>]*>/i, html, 'stylesheet link');
   });
 
-  test('container wraps header and main', () => {
-    expectOne(
-      /<div[^>]*class=["'][^"']*\bcontainer\b[^"']*["'][^>]*>[\s\S]*<header>[\s\S]*<\/header>[\s\S]*<main>[\s\S]*<\/main>[\s\S]*<\/div>/i,
-      html,
-      'container wrapping header and main'
-    );
+  test('site header exists with navigation and branding', () => {
+    expectOne(/<header[^>]*class=["'][^"']*\bsite-header\b[^"']*["'][^>]*>/i, html, 'site header');
+    expectOne(/<h1[^>]*class=["'][^"']*\bbrand-title\b[^"']*["'][^>]*>\s*ResiScanLite\s*<\/h1>/i, html, 'brand title');
+    expectOne(/<nav[^>]*class=["'][^"']*\bheader-nav\b[^"']*["'][^>]*>/i, html, 'header navigation');
   });
 
-  test('header has H1 + descriptive paragraph', () => {
-    expectOne(/<header>[\s\S]*?<h1>\s*ResiScanLite\s*<\/h1>[\s\S]*?<\/header>/, html, 'H1 in header');
-    expectOne(/<header>[\s\S]*?<p>[^<]+<\/p>[\s\S]*?<\/header>/, html, 'description paragraph in header');
+  test('container wraps main content', () => {
+    expectOne(
+      /<div[^>]*class=["'][^"']*\bcontainer\b[^"']*["'][^>]*>[\s\S]*<main>[\s\S]*<\/main>[\s\S]*<\/div>/i,
+      html,
+      'container wrapping main content'
+    );
   });
 
   test('upload section structure and file input attributes', () => {
@@ -239,5 +240,14 @@ describe('ResiScanLite HTML (index.html)', () => {
     const appPath = path.join(process.cwd(), 'app.js');
 
     expect(fs.existsSync(appPath)).toBe(true);
+  });
+
+  test('footer exists with social links and copyright', () => {
+    expectOne(/<footer[^>]*class=["'][^"']*\bsite-footer\b[^"']*["'][^>]*>/i, html, 'site footer');
+    expectOne(/(&copy;|©)\s*2024\s*ResiScanLite/i, html, 'copyright notice');
+    expectOne(/github\.com\/kedster/i, html, 'GitHub social link');
+    expectOne(/twitter\.com\/kedster/i, html, 'Twitter social link');
+    expectOne(/linkedin\.com\/in\/kedster/i, html, 'LinkedIn social link');
+    expectOne(/peerlist\.io\/kedster/i, html, 'Peerlist social link');
   });
 });
