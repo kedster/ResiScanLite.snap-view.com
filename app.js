@@ -27,6 +27,13 @@ class ResumeLinkScanner {
         // Search functionality
         searchInput.addEventListener('input', this.handleSearch.bind(this));
 
+        // Global search functionality
+        const globalSearchInput = document.getElementById('globalSearchInput');
+        if (globalSearchInput) {
+            globalSearchInput.addEventListener('input', this.handleGlobalSearch.bind(this));
+            globalSearchInput.addEventListener('focus', this.handleGlobalSearchFocus.bind(this));
+        }
+
         // Export functionality
         exportCsvBtn.addEventListener('click', () => this.exportResults('csv'));
         exportMarkdownBtn.addEventListener('click', () => this.exportResults('markdown'));
@@ -347,6 +354,34 @@ class ResumeLinkScanner {
         
         this.renderTable();
         this.updateSummary();
+    }
+
+    handleGlobalSearch(e) {
+        const query = e.target.value;
+        const resultsSearchInput = document.getElementById('searchInput');
+        
+        // If there are extracted links, sync with the results search
+        if (this.extractedLinks.length > 0) {
+            resultsSearchInput.value = query;
+            this.handleSearch({ target: { value: query } });
+            
+            // Show results section if hidden
+            const resultsSection = document.getElementById('resultsSection');
+            if (resultsSection.hidden) {
+                resultsSection.hidden = false;
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }
+
+    handleGlobalSearchFocus() {
+        // If there are extracted links, scroll to results section
+        if (this.extractedLinks.length > 0) {
+            const resultsSection = document.getElementById('resultsSection');
+            if (!resultsSection.hidden) {
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     }
 
     updateSummary() {
