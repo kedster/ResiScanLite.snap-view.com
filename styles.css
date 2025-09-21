@@ -252,10 +252,7 @@ main {
     transform: translateX(2px);
 }
 
-.app-links a:before {
-    content: "🚀 ";
-    margin-right: 0.3rem;
-}
+
 
 .social-links {
     display: flex;
