@@ -18,6 +18,7 @@
                 <a href="#upload" class="nav-link">Upload</a>
                 <a href="#resultsSection" class="nav-link">Results</a>
                 <a href="#about" class="nav-link">About</a>
+                <a href="#report" class="nav-link">Report Issue</a>
             </nav>
             <div class="header-search">
                 <input type="text" id="globalSearchInput" placeholder="Search documents or links..." class="global-search-input">
@@ -97,6 +98,46 @@
                     </div>
                 </div>
             </section>
+
+            <section class="issue-section" id="report">
+                <div class="issue-content">
+                    <h2>Report an Issue</h2>
+                    <p>Having trouble with the application? Please let us know by filling out this form.</p>
+                    <form class="issue-form" id="issueForm">
+                        <div class="form-group">
+                            <label for="didItWork">Did it work?</label>
+                            <select id="didItWork" name="didItWork" required>
+                                <option value="">Select...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="partially">Partially</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fileType">File type:</label>
+                            <select id="fileType" name="fileType" required>
+                                <option value="">Select...</option>
+                                <option value="pdf">PDF</option>
+                                <option value="doc">DOC</option>
+                                <option value="docx">DOCX</option>
+                                <option value="txt">TXT</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fileSize">File size (approx):</label>
+                            <select id="fileSize" name="fileSize" required>
+                                <option value="">Select...</option>
+                                <option value="small">Small (&lt; 1MB)</option>
+                                <option value="medium">Medium (1-10MB)</option>
+                                <option value="large">Large (&gt; 10MB)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit-issue-btn">Submit Issue</button>
+                        <div class="form-message" id="formMessage"></div>
+                    </form>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -117,42 +158,6 @@
                     <li><a href="#support">Support</a></li>
                     <li><a href="#docs">Documentation</a></li>
                 </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Report an Issue</h4>
-                <form class="issue-form" id="issueForm">
-                    <div class="form-group">
-                        <label for="didItWork">Did it work?</label>
-                        <select id="didItWork" name="didItWork" required>
-                            <option value="">Select...</option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                            <option value="partially">Partially</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fileType">File type:</label>
-                        <select id="fileType" name="fileType" required>
-                            <option value="">Select...</option>
-                            <option value="pdf">PDF</option>
-                            <option value="doc">DOC</option>
-                            <option value="docx">DOCX</option>
-                            <option value="txt">TXT</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fileSize">File size (approx):</label>
-                        <select id="fileSize" name="fileSize" required>
-                            <option value="">Select...</option>
-                            <option value="small">Small (&lt; 1MB)</option>
-                            <option value="medium">Medium (1-10MB)</option>
-                            <option value="large">Large (&gt; 10MB)</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary submit-issue-btn">Submit Issue</button>
-                    <div class="form-message" id="formMessage"></div>
-                </form>
             </div>
             <div class="footer-section">
                 <h4>Connect</h4>
