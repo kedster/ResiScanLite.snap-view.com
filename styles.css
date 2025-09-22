@@ -178,6 +178,39 @@ main {
     font-size: 0.9rem;
 }
 
+/* Issue Section */
+.issue-section {
+    margin: 4rem 0;
+    padding: 3rem 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.issue-content {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.issue-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.issue-content > p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0 auto 3rem;
+}
+
+.issue-content .issue-form {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+
 /* Site Footer */
 .site-footer {
     background: var(--text-color);
@@ -191,7 +224,9 @@ main {
     margin: 0 auto;
     padding: 0 2rem;
     display: grid;
+
     grid-template-columns: 2fr 1fr 1fr 1fr;
+
     gap: 3rem;
 }
 
