@@ -3,8 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResiScanLite</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>ResiScanLite - Document Link Scanner for PDF & Word Files</title>
+    <meta name="title" content="ResiScanLite - Document Link Scanner for PDF & Word Files">
+    <meta name="description" content="Secure client-side tool that scans PDF & Word documents for links. Extract, search & export links without uploading files to servers.">
+    <meta name="keywords" content="document scanner, link extraction, PDF link scanner, resume scanner, document analysis, link finder, secure document processing, client-side scanning, PDF parser, Word document scanner">
+    <meta name="author" content="Seth Keddy">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://resiscanlite.snap-view.com/">
+    <meta property="og:title" content="ResiScanLite - Professional Document Link Scanner">
+    <meta property="og:description" content="Secure client-side tool that scans PDF & Word documents for links. Extract, search & export links without uploading files to servers.">
+    <meta property="og:image" content="https://resiscanlite.snap-view.com/og-image.png">
+    <meta property="og:site_name" content="ResiScanLite">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://resiscanlite.snap-view.com/">
+    <meta property="twitter:title" content="ResiScanLite - Professional Document Link Scanner">
+    <meta property="twitter:description" content="Secure client-side tool that scans PDF & Word documents for links. Extract, search & export links without uploading files to servers.">
+    <meta property="twitter:image" content="https://resiscanlite.snap-view.com/og-image.png">
+    <meta property="twitter:creator" content="@sethkeddy">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ResiScanLite">
+    
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ResiScanLite",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "url": "https://resiscanlite.snap-view.com/",
+      "description": "Secure client-side tool that scans PDF & Word documents for links. Extract, search & export links without uploading files to servers.",
+      "author": {
+        "@type": "Person",
+        "name": "Seth Keddy",
+        "url": "https://github.com/kedster"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Private & Secure - All processing happens locally in your browser",
+        "Multiple Formats - Support for PDF, DOC, DOCX, and TXT files",
+        "Smart Search - Find and filter extracted links instantly", 
+        "Export Options - Download results as CSV or Markdown"
+      ]
+    }
+    </script>
 </head>
 <body>
     <!-- Enhanced Header -->
@@ -14,7 +74,7 @@
                 <h1 class="brand-title">ResiScanLite</h1>
                 <span class="brand-tagline">Document Link Scanner</span>
             </div>
-            <nav class="header-nav">
+            <nav class="header-nav" role="navigation" aria-label="Main navigation">
                 <a href="#upload" class="nav-link">Upload</a>
                 <a href="#resultsSection" class="nav-link">Results</a>
                 <a href="#about" class="nav-link">About</a>
@@ -35,7 +95,7 @@
             <section class="upload-section" id="upload">
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-content">
-                        <div class="upload-icon">📄</div>
+                        <div class="upload-icon" role="img" aria-label="Document icon">📄</div>
                         <h3>Drop files here or click to browse</h3>
                         <p>Supported formats: PDF, DOC, DOCX, TXT</p>
                     </div>

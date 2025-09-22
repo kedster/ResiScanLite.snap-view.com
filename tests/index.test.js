@@ -124,7 +124,7 @@ describe('ResiScanLite HTML (index.html)', () => {
     // Ensure viewport includes width=device-width and initial-scale
     expectOne(/<meta[^>]*name=["']viewport["'][^>]*content=["'][^"']*width=device-width[^"']*["']/i, html, 'viewport width=device-width');
     expectOne(/<meta[^>]*name=["']viewport["'][^>]*content=["'][^"']*initial-scale=1(\.0)?[^"']*["']/i, html, 'viewport initial-scale');
-    expectOne(/<title>\s*ResiScanLite\s*<\/title>/, html, 'title');
+    expectOne(/<title>[^<]*ResiScanLite[^<]*<\/title>/, html, 'title');
     expectOne(/<link[^>]*rel=["']stylesheet["'][^>]*href=["']styles\.css["'][^>]*>/i, html, 'stylesheet link');
   });
 
