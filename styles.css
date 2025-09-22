@@ -729,3 +729,69 @@ tr:hover {
     color: var(--error-color);
     border: 1px solid #fecaca;
 }
+
+/* Bookmark Styles */
+.bookmarks-section {
+    margin: 2rem 0;
+}
+
+.bookmarks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.bookmarks-header h2 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.bookmarks-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.bookmark-cell {
+    text-align: center;
+    width: 60px;
+}
+
+.bookmark-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    color: #ccc;
+}
+
+.bookmark-btn:hover {
+    background: var(--background-color);
+    transform: scale(1.1);
+}
+
+.bookmark-btn.bookmarked {
+    color: #fbbf24;
+}
+
+.bookmark-btn.bookmarked:hover {
+    color: #f59e0b;
+}
+
+/* Responsive adjustments for bookmarks */
+@media (max-width: 768px) {
+    .bookmarks-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .bookmarks-actions {
+        justify-content: center;
+    }
+}

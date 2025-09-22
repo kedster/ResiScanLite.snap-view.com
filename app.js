@@ -2,7 +2,9 @@ class ResumeLinkScanner {
     constructor() {
         this.extractedLinks = [];
         this.filteredLinks = [];
+        this.bookmarkedLinks = new Set(); // Store bookmarked link IDs
         this.init();
+        this.loadBookmarks();
     }
 
     init() {
@@ -38,6 +40,21 @@ class ResumeLinkScanner {
         exportCsvBtn.addEventListener('click', () => this.exportResults('csv'));
         exportMarkdownBtn.addEventListener('click', () => this.exportResults('markdown'));
         clearResultsBtn.addEventListener('click', this.clearResults.bind(this));
+
+        // Bookmark export functionality
+        const exportBookmarksCsvBtn = document.getElementById('exportBookmarksCSV');
+        const exportBookmarksMarkdownBtn = document.getElementById('exportBookmarksMarkdown');
+        const clearAllBookmarksBtn = document.getElementById('clearAllBookmarks');
+        
+        if (exportBookmarksCsvBtn) {
+            exportBookmarksCsvBtn.addEventListener('click', () => this.exportBookmarks('csv'));
+        }
+        if (exportBookmarksMarkdownBtn) {
+            exportBookmarksMarkdownBtn.addEventListener('click', () => this.exportBookmarks('markdown'));
+        }
+        if (clearAllBookmarksBtn) {
+            clearAllBookmarksBtn.addEventListener('click', this.clearAllBookmarks.bind(this));
+        }
 
         // Issue form functionality
         const issueForm = document.getElementById('issueForm');
@@ -326,22 +343,226 @@ class ResumeLinkScanner {
         
         document.getElementById('resultsSection').hidden = false;
         this.updateSummary();
+        this.updateBookmarksSummary();
     }
 
     renderTable() {
         const tbody = document.getElementById('resultsTableBody');
         tbody.innerHTML = '';
 
-        this.filteredLinks.forEach(link => {
+        this.filteredLinks.forEach((link, index) => {
+            // Create a unique ID for this link based on its content
+            const linkId = this.generateLinkId(link);
+            const isBookmarked = this.bookmarkedLinks.has(linkId);
+            
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="link-text">${this.escapeHtml(link.linkText)}</td>
                 <td class="url"><a href="${this.escapeHtml(link.url)}" target="_blank" rel="noopener">${this.escapeHtml(link.url)}</a></td>
                 <td class="context">${this.escapeHtml(link.context)}</td>
                 <td class="source-file">${this.escapeHtml(link.sourceFile)}</td>
+                <td class="bookmark-cell">
+                    <button 
+                        class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
+                        data-link-id="${linkId}"
+                        title="${isBookmarked ? 'Remove bookmark' : 'Add bookmark'}"
+                    >
+                        ${isBookmarked ? '★' : '☆'}
+                    </button>
+                </td>
             `;
             tbody.appendChild(row);
         });
+
+        // Add event listeners for bookmark buttons
+        const bookmarkButtons = tbody.querySelectorAll('.bookmark-btn');
+        bookmarkButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => this.toggleBookmark(e));
+        });
+    }
+
+    generateLinkId(link) {
+        // Create a unique ID based on URL, linkText, and sourceFile
+        return btoa(encodeURIComponent(`${link.url}|${link.linkText}|${link.sourceFile}`)).replace(/[=+/]/g, '');
+    }
+
+    toggleBookmark(e) {
+        const button = e.target;
+        const linkId = button.getAttribute('data-link-id');
+        
+        if (this.bookmarkedLinks.has(linkId)) {
+            this.bookmarkedLinks.delete(linkId);
+            button.classList.remove('bookmarked');
+            button.innerHTML = '☆';
+            button.title = 'Add bookmark';
+        } else {
+            this.bookmarkedLinks.add(linkId);
+            button.classList.add('bookmarked');
+            button.innerHTML = '★';
+            button.title = 'Remove bookmark';
+        }
+        
+        this.saveBookmarks();
+        this.updateBookmarksSummary();
+    }
+
+    loadBookmarks() {
+        try {
+            const saved = localStorage.getItem('resiscanBookmarks');
+            if (saved) {
+                this.bookmarkedLinks = new Set(JSON.parse(saved));
+            }
+        } catch (error) {
+            console.warn('Could not load bookmarks:', error);
+            this.bookmarkedLinks = new Set();
+        }
+    }
+
+    saveBookmarks() {
+        try {
+            localStorage.setItem('resiscanBookmarks', JSON.stringify([...this.bookmarkedLinks]));
+        } catch (error) {
+            console.warn('Could not save bookmarks:', error);
+        }
+    }
+
+    getBookmarkedLinks() {
+        return this.extractedLinks.filter(link => {
+            const linkId = this.generateLinkId(link);
+            return this.bookmarkedLinks.has(linkId);
+        });
+    }
+
+    updateBookmarksSummary() {
+        const bookmarkedCount = this.getBookmarkedLinks().length;
+        const bookmarksSection = document.getElementById('bookmarksSection');
+        
+        if (bookmarksSection) {
+            if (bookmarkedCount > 0) {
+                bookmarksSection.hidden = false;
+                this.renderBookmarksTable();
+            } else {
+                bookmarksSection.hidden = true;
+            }
+        }
+    }
+
+    renderBookmarksTable() {
+        const bookmarkedLinks = this.getBookmarkedLinks();
+        const tbody = document.getElementById('bookmarksTableBody');
+        const summary = document.getElementById('bookmarksSummary');
+        
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+
+        bookmarkedLinks.forEach(link => {
+            const linkId = this.generateLinkId(link);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="link-text">${this.escapeHtml(link.linkText)}</td>
+                <td class="url"><a href="${this.escapeHtml(link.url)}" target="_blank" rel="noopener">${this.escapeHtml(link.url)}</a></td>
+                <td class="context">${this.escapeHtml(link.context)}</td>
+                <td class="source-file">${this.escapeHtml(link.sourceFile)}</td>
+                <td class="bookmark-cell">
+                    <button 
+                        class="bookmark-btn bookmarked" 
+                        data-link-id="${linkId}"
+                        title="Remove bookmark"
+                    >
+                        ★
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Add event listeners for bookmark buttons
+        const bookmarkButtons = tbody.querySelectorAll('.bookmark-btn');
+        bookmarkButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => this.toggleBookmark(e));
+        });
+
+        // Update summary
+        if (summary) {
+            summary.textContent = `${bookmarkedLinks.length} bookmarked link${bookmarkedLinks.length !== 1 ? 's' : ''}`;
+        }
+    }
+
+    exportBookmarks(format) {
+        const bookmarkedLinks = this.getBookmarkedLinks();
+        if (bookmarkedLinks.length === 0) {
+            this.showError('No bookmarked links to export');
+            return;
+        }
+
+        let content = '';
+        let filename = '';
+        let mimeType = '';
+
+        if (format === 'csv') {
+            content = this.generateBookmarksCsv(bookmarkedLinks);
+            filename = 'bookmarked-links.csv';
+            mimeType = 'text/csv';
+        } else if (format === 'markdown') {
+            content = this.generateBookmarksMarkdown(bookmarkedLinks);
+            filename = 'bookmarked-links.md';
+            mimeType = 'text/markdown';
+        }
+
+        this.downloadFile(content, filename, mimeType);
+    }
+
+    generateBookmarksCsv(bookmarkedLinks) {
+        const headers = ['Link Text', 'URL', 'Context Snippet', 'Source File'];
+        const csvContent = [
+            headers.join(','),
+            ...bookmarkedLinks.map(link => [
+                this.escapeCsv(link.linkText),
+                this.escapeCsv(link.url),
+                this.escapeCsv(link.context),
+                this.escapeCsv(link.sourceFile)
+            ].join(','))
+        ].join('\n');
+        
+        return csvContent;
+    }
+
+    generateBookmarksMarkdown(bookmarkedLinks) {
+        let markdown = '# Bookmarked Links Report\n\n';
+        markdown += `Generated on: ${new Date().toLocaleString()}\n\n`;
+        markdown += `Total bookmarked links: ${bookmarkedLinks.length}\n\n`;
+        
+        const fileGroups = this.groupBy(bookmarkedLinks, 'sourceFile');
+        
+        Object.keys(fileGroups).forEach(fileName => {
+            markdown += `## ${fileName}\n\n`;
+            markdown += '| Link Text | URL | Context Snippet |\n';
+            markdown += '|-----------|-----|----------------|\n';
+            
+            fileGroups[fileName].forEach(link => {
+                markdown += `| ${this.escapeMarkdown(link.linkText)} | ${this.escapeMarkdown(link.url)} | ${this.escapeMarkdown(link.context)} |\n`;
+            });
+            
+            markdown += '\n';
+        });
+        
+        return markdown;
+    }
+
+    clearAllBookmarks() {
+        if (this.bookmarkedLinks.size === 0) {
+            return;
+        }
+
+        const confirmed = confirm(`Are you sure you want to clear all ${this.bookmarkedLinks.size} bookmark${this.bookmarkedLinks.size !== 1 ? 's' : ''}?`);
+        if (confirmed) {
+            this.bookmarkedLinks.clear();
+            this.saveBookmarks();
+            this.updateBookmarksSummary();
+            // Re-render main table to update bookmark buttons
+            this.renderTable();
+        }
     }
 
     handleSearch(e) {
