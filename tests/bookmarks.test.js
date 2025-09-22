@@ -278,6 +278,6 @@ describe('Bookmark functionality', () => {
     const bookmarkButtons = tbody.querySelectorAll('.bookmark-btn');
     
     expect(bookmarkButtons).toHaveLength(2); // One for each link
-    expect(bookmarkButtons[0].innerHTML).toBe('☆'); // Not bookmarked initially
+    expect(bookmarkButtons[0].innerHTML.trim()).toBe('☆'); // Not bookmarked initially
   });
 });
