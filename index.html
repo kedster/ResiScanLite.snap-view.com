@@ -65,6 +65,7 @@
                                 <th>URL</th>
                                 <th>Context Snippet</th>
                                 <th>Source File</th>
+                                <th>Bookmark</th>
                             </tr>
                         </thead>
                         <tbody id="resultsTableBody">
@@ -72,6 +73,33 @@
                     </table>
                 </div>
                 <div class="results-summary" id="resultsSummary"></div>
+            </section>
+
+            <section class="bookmarks-section" id="bookmarksSection" hidden>
+                <div class="bookmarks-header">
+                    <h2>Bookmarked Links</h2>
+                    <div class="bookmarks-actions">
+                        <button id="exportBookmarksCSV" class="btn btn-secondary">Export Bookmarks CSV</button>
+                        <button id="exportBookmarksMarkdown" class="btn btn-secondary">Export Bookmarks Markdown</button>
+                        <button id="clearAllBookmarks" class="btn btn-outline">Clear All Bookmarks</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="bookmarksTable">
+                        <thead>
+                            <tr>
+                                <th>Link Text</th>
+                                <th>URL</th>
+                                <th>Context Snippet</th>
+                                <th>Source File</th>
+                                <th>Bookmark</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookmarksTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="results-summary" id="bookmarksSummary"></div>
             </section>
 
             <section class="about-section" id="about">
@@ -94,6 +122,10 @@
                         <div class="feature">
                             <h3>Export Options</h3>
                             <p>Download results as CSV or Markdown</p>
+                        </div>
+                        <div class="feature">
+                            <h3>Free Bookmarking</h3>
+                            <p>Save and manage important links for later</p>
                         </div>
                     </div>
                 </div>

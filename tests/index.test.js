@@ -188,13 +188,13 @@ describe('ResiScanLite HTML (index.html)', () => {
     const theadMatch = html.match(/<thead>([\s\S]*?)<\/thead>/i);
     expect(theadMatch).not.toBeNull();
 
-    // Exact order of the four columns
-    const headerOrder = /<tr>\s*<th>\s*Link Text\s*<\/th>\s*<th>\s*URL\s*<\/th>\s*<th>\s*Context Snippet\s*<\/th>\s*<th>\s*Source File\s*<\/th>\s*<\/tr>/i;
+    // Exact order of the five columns
+    const headerOrder = /<tr>\s*<th>\s*Link Text\s*<\/th>\s*<th>\s*URL\s*<\/th>\s*<th>\s*Context Snippet\s*<\/th>\s*<th>\s*Source File\s*<\/th>\s*<th>\s*Bookmark\s*<\/th>\s*<\/tr>/i;
     expect(headerOrder.test(theadMatch[1])).toBe(true);
 
-    // Exactly 4 header columns
+    // Exactly 5 header columns
     const thCount = (theadMatch[1].match(/<th\b/gi) || []).length;
-    expect(thCount).toBe(4);
+    expect(thCount).toBe(5);
 
     // tbody exists and is initially empty (whitespace-only)
     const tbodyMatch = html.match(/<tbody[^>]*id=["']resultsTableBody["'][^>]*>([\s\S]*?)<\/tbody>/i);
@@ -214,7 +214,9 @@ describe('ResiScanLite HTML (index.html)', () => {
     const ids = [
       'uploadArea','fileInput','processingStatus','resultsSection',
       'resultsTable','resultsTableBody','resultsSummary','searchInput',
-      'exportCsv','exportMarkdown','clearResults'
+      'exportCsv','exportMarkdown','clearResults','bookmarksSection',
+      'bookmarksTable','bookmarksTableBody','bookmarksSummary',
+      'exportBookmarksCSV','exportBookmarksMarkdown','clearAllBookmarks'
     ];
     for (const id of ids) {
       const count = countOccurrences(new RegExp(`\\bid=["']${id}["']`, 'g'), html);
